@@ -1,10 +1,14 @@
 package com.example.data_mining.services;
 
 import com.example.data_mining.commons.Constant;
+import com.example.data_mining.dtos.CreatePatientRequest;
 import com.example.data_mining.dtos.ForecastRequest;
 import com.example.data_mining.dtos.PatientDetailDTO;
-import com.example.data_mining.dtos.PatientListDTO;
+import com.example.data_mining.models.HealthIndicators;
+import com.example.data_mining.models.Patient;
+import com.example.data_mining.repositories.HealthIndicatorsRepository;
 import com.example.data_mining.repositories.PatientRepository;
+import java.util.Objects;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -21,10 +25,11 @@ import org.springframework.web.client.RestTemplate;
 public class PatientService {
 
   private final PatientRepository patientRepository;
+  private final HealthIndicatorsRepository healthIndicatorsRepository;
   private final RestTemplate restTemplate;
 
-  public Page<PatientListDTO> getPatientList(Pageable pageable) {
-    return patientRepository.getPatientList(pageable);
+  public Page<PatientDetailDTO> getPatientList(Pageable pageable) {
+    return patientRepository.findPatients(pageable);
   }
 
   public PatientDetailDTO getPatientById(int id) {
@@ -35,12 +40,22 @@ public class PatientService {
     HttpHeaders headers = new HttpHeaders();
     headers.setContentType(MediaType.APPLICATION_JSON);
     HttpEntity<ForecastRequest> requestEntity = new HttpEntity<>(request, headers);
-    ResponseEntity<String> response = restTemplate.exchange(Constant.knn, HttpMethod.POST, requestEntity, String.class);
-    String result = response.getBody();
-    assert result != null;
+    ResponseEntity<String> response = restTemplate.exchange(Constant.knn, HttpMethod.POST,
+        requestEntity, String.class);
+    if (response.getBody() == null) {
+      return "Lỗi xử lý";
+    }
+    String result = Objects.requireNonNull(response.getBody()).trim().replaceAll("^\"|\"$", "");
     if (result.equals(Constant.YES)) {
       return "Bệnh nhân có nguy cơ bị bệnh tim";
     }
     return "Bệnh nhân không có nguy cơ bị tim";
+  }
+
+  public void createPatient(CreatePatientRequest request) {
+    HealthIndicators healthIndicators = new HealthIndicators(request);
+    Integer healthIndicatorsId = healthIndicatorsRepository.saveAndFlush(healthIndicators).getId();
+    Patient patient = new Patient(request, healthIndicatorsId);
+    patientRepository.save(patient);
   }
 }

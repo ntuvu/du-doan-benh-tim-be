@@ -23,4 +23,11 @@ join HealthIndicators h on p.healthIndicatorsId = h.id
 where p.id = :id
 """)
   PatientDetailDTO getPatientById(int id);
+
+  @Query(value = """
+select new com.example.data_mining.dtos.PatientDetailDTO(p, h)
+from Patient p
+join HealthIndicators h on p.healthIndicatorsId = h.id
+""")
+  Page<PatientDetailDTO> findPatients(Pageable pageable);
 }

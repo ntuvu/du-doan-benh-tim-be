@@ -18,7 +18,7 @@ public class PatientListDTO {
 
   private String sex;
 
-  private int age;
+  private Double age;
 
   public PatientListDTO(Patient patient) {
     this.patientId = patient.getId();

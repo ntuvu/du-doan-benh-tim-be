@@ -1,5 +1,6 @@
 package com.example.data_mining.models;
 
+import com.example.data_mining.dtos.CreatePatientRequest;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -27,35 +28,52 @@ public class HealthIndicators {
   private int id;
 
   @Column(name = "cp")
-  private int cp;
+  private Double cp;
 
   @Column(name = "trestbps")
-  private int trestbps;
+  private Double trestbps;
 
   @Column(name = "chol")
-  private int chol;
+  private Double chol;
 
   @Column(name = "fbs")
-  private int fbs;
+  private Double fbs;
 
   @Column(name = "restecg")
-  private int restecg;
+  private Double restecg;
 
   @Column(name = "thalach")
-  private int thalach;
+  private Double thalach;
 
   @Column(name = "exang")
-  private int exang;
+  private Double exang;
 
   @Column(name = "oldpeak")
   private double oldpeak;
 
   @Column(name = "slope")
-  private int slope;
+  private Double slope;
 
   @Column(name = "ca")
-  private int ca;
+  private Double ca;
 
   @Column(name = "thal")
-  private int thal;
+  private Double thal;
+
+  @Column(name = "target")
+  private Double target;
+
+  public HealthIndicators(CreatePatientRequest request) {
+    this.cp = request.getCp();
+    this.trestbps = request.getTrestbps();
+    this.chol = request.getChol();
+    this.fbs = request.getFbs();
+    this.restecg = request.getRestecg();
+    this.thalach = request.getThalach();
+    this.exang = request.getExang();
+    this.oldpeak = request.getOldpeak();
+    this.slope = request.getSlope();
+    this.ca = request.getCa();
+    this.thal = request.getThal();
+  }
 }

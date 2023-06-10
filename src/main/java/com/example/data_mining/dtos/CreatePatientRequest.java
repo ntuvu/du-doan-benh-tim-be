@@ -5,11 +5,15 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class ForecastRequest {
+public class CreatePatientRequest {
 
-  private Double age;
+  private String firstName;
+
+  private String lastName;
 
   private Double sex;
+
+  private Double age;
 
   private Double cp;
 

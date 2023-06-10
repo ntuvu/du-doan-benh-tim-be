@@ -1,5 +1,6 @@
 package com.example.data_mining.models;
 
+import com.example.data_mining.dtos.CreatePatientRequest;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -36,11 +37,19 @@ public class Patient {
   private String lastName;
 
   @Column(name = "sex", nullable = false)
-  private int sex;
+  private Double sex;
 
   @Column(name = "age", nullable = false)
-  private int age;
+  private Double age;
 
   @Column(name = "health_indicators_id")
-  private int healthIndicatorsId;
+  private Integer healthIndicatorsId;
+
+  public Patient(CreatePatientRequest request, Integer healthIndicatorsId) {
+    this.firstName = request.getFirstName();
+    this.lastName = request.getLastName();
+    this.age = request.getAge();
+    this.sex = request.getSex();
+    this.healthIndicatorsId = healthIndicatorsId;
+  }
 }
