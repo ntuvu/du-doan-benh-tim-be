@@ -9,6 +9,7 @@ import com.example.data_mining.models.Patient;
 import com.example.data_mining.repositories.HealthIndicatorsRepository;
 import com.example.data_mining.repositories.PatientRepository;
 import java.util.Objects;
+import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -57,5 +58,22 @@ public class PatientService {
     Integer healthIndicatorsId = healthIndicatorsRepository.saveAndFlush(healthIndicators).getId();
     Patient patient = new Patient(request, healthIndicatorsId);
     patientRepository.save(patient);
+  }
+
+  public void deletePatient(int id) {
+    Patient patient = patientRepository.findById(id).orElseThrow();
+    int healthIndicatorsId = patient.getHealthIndicatorsId();
+    patientRepository.deleteById(id);
+    healthIndicatorsRepository.deleteById(healthIndicatorsId);
+  }
+
+  public void updatePatient(int id, @NonNull CreatePatientRequest request) {
+    Patient patient = patientRepository.findById(id).orElseThrow();
+    HealthIndicators healthIndicators = healthIndicatorsRepository.findById(
+        patient.getHealthIndicatorsId()).orElseThrow();
+    patient.replace(request);
+    healthIndicators.replace(request);
+    patientRepository.save(patient);
+    healthIndicatorsRepository.save(healthIndicators);
   }
 }

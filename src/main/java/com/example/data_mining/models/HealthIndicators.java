@@ -49,7 +49,7 @@ public class HealthIndicators {
   private Double exang;
 
   @Column(name = "oldpeak")
-  private double oldpeak;
+  private Double oldpeak;
 
   @Column(name = "slope")
   private Double slope;
@@ -64,6 +64,20 @@ public class HealthIndicators {
   private Double target;
 
   public HealthIndicators(CreatePatientRequest request) {
+    this.cp = request.getCp();
+    this.trestbps = request.getTrestbps();
+    this.chol = request.getChol();
+    this.fbs = request.getFbs();
+    this.restecg = request.getRestecg();
+    this.thalach = request.getThalach();
+    this.exang = request.getExang();
+    this.oldpeak = request.getOldpeak();
+    this.slope = request.getSlope();
+    this.ca = request.getCa();
+    this.thal = request.getThal();
+  }
+
+  public void replace(CreatePatientRequest request) {
     this.cp = request.getCp();
     this.trestbps = request.getTrestbps();
     this.chol = request.getChol();

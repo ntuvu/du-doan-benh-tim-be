@@ -52,4 +52,11 @@ public class Patient {
     this.sex = request.getSex();
     this.healthIndicatorsId = healthIndicatorsId;
   }
+
+  public void replace(CreatePatientRequest request) {
+    this.firstName = request.getFirstName();
+    this.lastName = request.getLastName();
+    this.age = request.getAge();
+    this.sex = request.getSex();
+  }
 }
